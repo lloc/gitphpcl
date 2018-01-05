@@ -1,0 +1,12 @@
+{
+  "name": "lloc/gitphpcl",
+  "description": "Generate your changelog from git with PHP",
+  "require": {
+    "php": "^7.0"
+  },
+  "autoload": {
+    "psr-4" : {
+      "lloc\\gitphpcl\\" : "src/"
+    }
+  }
+}
