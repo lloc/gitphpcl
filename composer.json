@@ -4,6 +4,14 @@
   "require": {
     "php": "^7.0"
   },
+  "authors": [
+    {
+      "name": "Dennis Ploetner",
+      "email": "re@lloc.de",
+      "homepage": "http://lloc.de",
+      "role": "Developer"
+    }
+  ],
   "autoload": {
     "psr-4" : {
       "lloc\\gitphpcl\\" : "src/"
