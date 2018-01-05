@@ -28,7 +28,7 @@ if ( count( $arr ) > 1 ) {
 		echo "### Bug Fixes\n\n";
 
 		foreach ( $commits as $c ) {
-			printf( "* **%s:** %s (%s)\n", $c->module, $c->message, $c->commitId );
+			printf( "* **%s:** %s\n", $c->module, $c->message );
 		}
 	}
 
@@ -37,7 +37,7 @@ if ( count( $arr ) > 1 ) {
 		echo "### Features\n\n";
 
 		foreach ( $commits as $c ) {
-			printf( "* **%s:** %s (%s)\n", $c->module, $c->message, $c->commitId );
+			printf( "* **%s:** %s\n", $c->module, $c->message );
 		}
 	}
 }

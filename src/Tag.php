@@ -24,13 +24,13 @@ class Tag {
 	}
 
 	/**
-	 * @param array $arr
+	 * @param string $line
 	 * @param string $delimiter
 	 *
 	 * @return Tag
 	 */
-	public static function init( array $arr, $delimiter = '|' ) {
-		list( $date, $name ) = explode( $delimiter, $arr );
+	public static function init( string $line, $delimiter = '|' ) {
+		list( $date, $name ) = explode( $delimiter, $line );
 
 		return new self( $name, $date );
 	}
