@@ -25,15 +25,6 @@ if ( count( $arr ) > 1 ) {
 
 	printf( "## %s (%s)\n\n", $currTag->get_name(), $currTag->get_date() );
 
-	$commits = $logs->get( 'feat' );
-	if ( $commits ) {
-		echo "### Features\n\n";
-
-		foreach ( $commits as $c ) {
-			printf( "* **%s:** %s (%s)\n", $c->module, $c->message, $c->commitId );
-		}
-	}
-
 	$commits = $logs->get( 'fix' );
 	if ( $commits ) {
 		echo "### Bug Fixes\n\n";
@@ -43,4 +34,12 @@ if ( count( $arr ) > 1 ) {
 		}
 	}
 
+	$commits = $logs->get( 'feat' );
+	if ( $commits ) {
+		echo "### Features\n\n";
+
+		foreach ( $commits as $c ) {
+			printf( "* **%s:** %s (%s)\n", $c->module, $c->message, $c->commitId );
+		}
+	}
 }

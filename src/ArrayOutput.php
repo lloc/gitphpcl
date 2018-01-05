@@ -24,9 +24,10 @@ class ArrayOutput {
 	 * @return array
 	 */
 	function get(): array {
-		$output = shell_exec( $this->cmd );
+		$result = shell_exec( $this->cmd );
+		$arr    = preg_split(  "#[\r\n]+#", $result );
 
-		return (array) preg_split( "#[\r\n]+#", $output );
+		return false === $arr ? [] : array_filter( $arr );
 	}
 
 }
