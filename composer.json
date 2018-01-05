@@ -4,6 +4,8 @@
   "require": {
     "php": "^7.0"
   },
+  "keywords": ["git","changelog"],
+  "license": "GPL3",
   "authors": [
     {
       "name": "Dennis Ploetner",

@@ -12,10 +12,8 @@ $cmd = 'git tag -l --format="%(creatordate:iso8601)|%(refname:short)" | sort -r'
 $arr = ( new ArrayOutput( $cmd ) )->get();
 
 if ( count( $arr ) > 1 ) {
-	list( $date, $name ) = explode( '|', $arr[0] );
-	$currTag = new Tag( $name, $date );
-	list( $date, $name ) = explode( '|', $arr[1] );
-	$lastTag = new Tag( $name, $date );
+	$currTag = Tag::init( $arr[0] );
+	$lastTag = Tag::init( $arr[1] );;
 
 	$cmd  = sprintf( 'git log %s...%s --pretty=oneline --abbrev-commit',
 		$lastTag->get_name(), $currTag->get_name()
