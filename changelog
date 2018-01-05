@@ -1,4 +1,4 @@
-#!/usr/bin/php
+#!/usr/bin/php -q
 <?php
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -6,6 +6,12 @@ require_once __DIR__ . '/vendor/autoload.php';
 use lloc\gitphpcl\{
 	ArrayOutput, Tag, Logs
 };
+
+$options = getopt( 'f:' );
+if ( 0 == count( $options ) ) {
+	echo 'Please provide a path value for -f <filename>', "\n\n";
+	exit( 1 );
+}
 
 exec( 'git fetch --tags' );
 
