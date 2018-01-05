@@ -5,7 +5,7 @@
     "php": "^7.0"
   },
   "keywords": ["git","changelog"],
-  "license": "GPL3",
+  "license": "GPL-3.0",
   "authors": [
     {
       "name": "Dennis Ploetner",
@@ -17,6 +17,11 @@
   "autoload": {
     "psr-4" : {
       "lloc\\gitphpcl\\" : "src/"
+    }
+  },
+  "extra": {
+    "gitphpcl": {
+      "filename": "CHANGELOG.md"
     }
   }
 }
