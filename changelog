@@ -19,16 +19,25 @@ $cmd = 'git tag -l --format="%(creatordate:iso8601)|%(refname:short)" | sort -r'
 $arr = ( new ArrayOutput( $cmd ) )->get();
 
 if ( count( $arr ) > 1 ) {
-	$currTag = Tag::init( $arr[0] );
-	$lastTag = Tag::init( $arr[1] );;
+	$currTag  = Tag::init( $arr[0] );
+	$headline = sprintf( "## %s (%s)", $currTag->get_name(), $currTag->get_date() );
+
+	$changeLog = new \lloc\gitphpcl\Changelog( $options['f'] );
+	$pos       = $changeLog->firstpos( '##' );
+	if ( $changeLog->compare( $pos, $headline ) ) {
+        echo 'Nothing to do! The current release is already in your changelog!', PHP_EOL;
+        exit( 0 );
+	};
+
+	echo $headline, PHP_EOL, PHP_EOL;
+
+	$lastTag = Tag::init( $arr[1] );
 
 	$cmd  = sprintf( 'git log %s...%s --pretty=oneline --abbrev-commit',
 		$lastTag->get_name(), $currTag->get_name()
 	);
 	$arr  = ( new ArrayOutput( $cmd ) )->get();
 	$logs = ( new Logs( '#(?<commitId>[a-z0-9]+) (?<type>[a-z]+)\((?<module>.+)\): (?<message>.+)#' ) )->add( $arr );
-
-	printf( "## %s (%s)\n\n", $currTag->get_name(), $currTag->get_date() );
 
 	$commits = $logs->get( 'fix' );
 	if ( $commits ) {
