@@ -18,42 +18,45 @@ exec( 'git fetch --tags' );
 $cmd = 'git tag -l --format="%(creatordate:iso8601)|%(refname:short)" | sort -r';
 $arr = ( new ArrayOutput( $cmd ) )->get();
 
-if ( count( $arr ) > 1 ) {
-	$currTag  = Tag::init( $arr[0] );
-	$headline = sprintf( "## %s (%s)", $currTag->get_name(), $currTag->get_date() );
+$currTag   = Tag::init( $arr[0] );
+$headline  = sprintf( "## %s (%s)", $currTag->get_name(), $currTag->get_date() );
+$changeLog = new \lloc\gitphpcl\Changelog( $options['f'] );
 
-	$changeLog = new \lloc\gitphpcl\Changelog( $options['f'] );
-	$pos       = $changeLog->firstpos( '##' );
-	if ( $changeLog->compare( $pos, $headline ) ) {
-        echo 'Nothing to do! The current release is already in your changelog!', PHP_EOL;
-        exit( 0 );
-	};
+if ( count( $arr ) <= 1 ) {
+    // Code for the creation of the changelog file
+	exit( 0 );
+}
 
-	echo $headline, PHP_EOL, PHP_EOL;
+$pos = $changeLog->firstpos( '##' );
+if ( $changeLog->compare( $pos, $headline ) ) {
+	echo 'Nothing to do! The current release is already in your changelog!', PHP_EOL;
+	exit( 0 );
+};
 
-	$lastTag = Tag::init( $arr[1] );
+echo $headline, PHP_EOL, PHP_EOL;
 
-	$cmd  = sprintf( 'git log %s...%s --pretty=oneline --abbrev-commit',
-		$lastTag->get_name(), $currTag->get_name()
-	);
-	$arr  = ( new ArrayOutput( $cmd ) )->get();
-	$logs = ( new Logs( '#(?<commitId>[a-z0-9]+) (?<type>[a-z]+)\((?<module>.+)\): (?<message>.+)#' ) )->add( $arr );
+$lastTag = Tag::init( $arr[1] );
 
-	$commits = $logs->get( 'fix' );
-	if ( $commits ) {
-		echo "### Bug Fixes\n\n";
+$cmd  = sprintf( 'git log %s...%s --pretty=oneline --abbrev-commit',
+	$lastTag->get_name(), $currTag->get_name()
+);
+$arr  = ( new ArrayOutput( $cmd ) )->get();
+$logs = ( new Logs( '#(?<commitId>[a-z0-9]+) (?<type>[a-z]+)\((?<module>.+)\): (?<message>.+)#' ) )->add( $arr );
 
-		foreach ( $commits as $c ) {
-			printf( "* **%s:** %s\n", $c->module, $c->message );
-		}
+$commits = $logs->get( 'fix' );
+if ( $commits ) {
+	echo "### Bug Fixes\n\n";
+
+	foreach ( $commits as $c ) {
+		printf( "* **%s:** %s\n", $c->module, $c->message );
 	}
+}
 
-	$commits = $logs->get( 'feat' );
-	if ( $commits ) {
-		echo "### Features\n\n";
+$commits = $logs->get( 'feat' );
+if ( $commits ) {
+	echo "### Features\n\n";
 
-		foreach ( $commits as $c ) {
-			printf( "* **%s:** %s\n", $c->module, $c->message );
-		}
+	foreach ( $commits as $c ) {
+		printf( "* **%s:** %s\n", $c->module, $c->message );
 	}
 }
