@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.3 (2018-01-21)
+
+### Feature
+
+* **Directories:** addition of  other repositories is now possible
+
 ## v0.2.1 (2018-01-09)
 
 ### Bug Fixes
