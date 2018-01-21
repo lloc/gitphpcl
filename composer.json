@@ -15,13 +15,6 @@
     }
   ],
   "autoload": {
-    "psr-4" : {
-      "lloc\\gitphpcl\\" : "src/"
-    }
-  },
-  "extra": {
-    "gitphpcl": {
-      "filename": "CHANGELOG.md"
-    }
+    "classmap": [ "src/" ]
   }
 }
