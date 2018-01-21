@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.3.2 (2018-01-21)
+
+### Bug Fixes
+
+* **License:** GPL 3.0 or later
+
 ## v0.3.1 (2018-01-21)
 
 ### Bug Fixes
