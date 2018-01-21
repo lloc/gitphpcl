@@ -4,12 +4,12 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 use lloc\gitphpcl\{
-	ArrayOutput, Tag, Logs
+	ArrayOutput, Tag, Logs, Directories
 };
 
-$options = getopt( 'f:' );
-if ( 0 == count( $options ) ) {
-	echo 'Please provide a path value for -f <filename>', "\n\n";
+$options = getopt( 'f:p:' );
+if ( ! isset( $options['f'] ) ) {
+	echo 'Please provide a path value for -f <filename>', PHP_EOL;
 	exit( 1 );
 }
 
@@ -24,39 +24,55 @@ $changeLog = new \lloc\gitphpcl\Changelog( $options['f'] );
 
 if ( count( $arr ) <= 1 ) {
     // Code for the creation of the changelog file
-	exit( 0 );
+    exit( 0 );
 }
 
 $pos = $changeLog->firstpos( '##' );
 if ( $changeLog->compare( $pos, $headline ) ) {
-	echo 'Nothing to do! The current release is already in your changelog!', PHP_EOL;
-	exit( 0 );
+    echo 'Nothing to do! The current release is already in your changelog!', PHP_EOL;
+    exit( 0 );
 };
 
-echo $headline, PHP_EOL, PHP_EOL;
+$pos = $changeLog->insert( [ $headline, PHP_EOL, PHP_EOL ], $pos );
 
 $lastTag = Tag::init( $arr[1] );
 
-$cmd  = sprintf( 'git log %s...%s --pretty=oneline --abbrev-commit',
-	$lastTag->get_name(), $currTag->get_name()
-);
-$arr  = ( new ArrayOutput( $cmd ) )->get();
-$logs = ( new Logs( '#(?<commitId>[a-z0-9]+) (?<type>[a-z]+)\((?<module>.+)\): (?<message>.+)#' ) )->add( $arr );
+$directories = Directories::init( $options );
+while ( $directories->next() ) {
+	$cmd  = sprintf( 'git log %s...%s --pretty=oneline --abbrev-commit',
+		$lastTag->get_name(), $currTag->get_name()
+	);
+	$arr  = ( new ArrayOutput( $cmd ) )->get();
+	$logs = ( new Logs( '#(?<commitId>[a-z0-9]+) (?<type>[a-z]+)\((?<module>.+)\): (?<message>.+)#' ) )->add( $arr );
 
-$commits = $logs->get( 'fix' );
-if ( $commits ) {
-	echo "### Bug Fixes\n\n";
+	$commits = $logs->get( 'fix' );
+	if ( $commits ) {
+		$pos = $changeLog->insert( [ '### Bug Fixes' . PHP_EOL, PHP_EOL ], $pos );
 
-	foreach ( $commits as $c ) {
-		printf( "* **%s:** %s\n", $c->module, $c->message );
+		$lines = [];
+		foreach ( $commits as $c ) {
+			$lines[] = sprintf( "* **%s:** %s", $c->module, $c->message ) . PHP_EOL;
+		}
+
+		$pos = $changeLog->insert( $lines, $pos, [ PHP_EOL ] );
+	}
+
+	$commits = $logs->get( 'feat' );
+	if ( $commits ) {
+		$pos = $changeLog->insert( [ '### Feature', PHP_EOL, PHP_EOL ], $pos );
+
+		$lines = [];
+		foreach ( $commits as $c ) {
+			$lines[] = sprintf( "* **%s:** %s", $c->module, $c->message ) . PHP_EOL;
+		}
+
+		$pos = $changeLog->insert( $lines, $pos, [ PHP_EOL ] );
 	}
 }
 
-$commits = $logs->get( 'feat' );
-if ( $commits ) {
-	echo "### Features\n\n";
-
-	foreach ( $commits as $c ) {
-		printf( "* **%s:** %s\n", $c->module, $c->message );
-	}
+if ( $changeLog->save( $options['f'] ) ) {
+    echo 'Your changelog is saved!', PHP_EOL;
+    exit( 0 );
 }
+echo 'Could not save your changelog!', PHP_EOL;
+exit( 1 );

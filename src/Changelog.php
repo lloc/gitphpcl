@@ -56,4 +56,39 @@ class Changelog {
 		return $str === $this->getpos( $index );
 	}
 
+	/**
+	 * @param array $lines
+	 * @param int $pos
+	 * @param array $add
+	 *
+	 * @return int
+	 */
+	public function insert( array $lines, int $pos, array $add = [] ): int {
+		if ( ! empty ( $add ) ) {
+			$lines = array_merge( $lines, $add );
+		}
+
+	    if ( $pos >= count( $this->lines ) - 1 ) {
+		    $this->lines = array_merge( $this->lines, $lines );
+
+		    return count( $this->lines ) - 1;
+	    }
+
+        $head = array_slice( $this->lines, 0, $pos );
+        $tail = array_slice( $this->lines, $pos);
+
+        $this->lines = array_merge( $head, $lines, $tail );
+
+        return $pos + count( $lines );
+	}
+
+	/**
+	 * @param string $filename
+	 *
+	 * @return bool
+	 */
+	public function save( string $filename ): bool {
+		return file_put_contents( $filename, implode( '', $this->lines ) );
+	}
+
 }
