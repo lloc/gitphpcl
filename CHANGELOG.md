@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.3.1 (2018-01-21)
+
+### Bug Fixes
+
+* **Classmap:** autoloader uses classmap instead of psr-4 for compatibility
+
 ## v0.3 (2018-01-21)
 
 ### Feature
