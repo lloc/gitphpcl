@@ -9,16 +9,22 @@ namespace lloc\gitphpcl;
 class Commit {
 
 	/**
-	 * @var string $type
-	 * @var string $module
-	 * @var string $message
-	 * @var string $commitId
-	 * @var string $format
+	 * @var string
 	 */
-	public $module, $message, $commitId;
+	public string $module;
 
 	/**
-	 * @param array $args
+	 * @var string
+	 */
+	public string $message;
+
+	/**
+	 * @var string
+	 */
+	public string $commitId;
+
+	/**
+	 * @param string[] $args
 	 */
 	public function __construct( array $args ) {
 		$this->module   = $args['module'] ?? '';

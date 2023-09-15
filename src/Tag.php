@@ -9,10 +9,14 @@ namespace lloc\gitphpcl;
 class Tag {
 
 	/**
-	 * @var string $name
+	 * @var string
+	 */
+	protected string $name;
+
+	/**
 	 * @var string $date
 	 */
-	protected $name, $date;
+	protected string $date;
 
 	/**
 	 * @param string $name
@@ -20,7 +24,7 @@ class Tag {
 	 */
 	public function __construct( string $name, string $date ) {
 		$this->name = $name;
-		$this->date = new \DateTime( $date );
+		$this->date = $date;
 	}
 
 	/**
@@ -29,7 +33,7 @@ class Tag {
 	 *
 	 * @return Tag
 	 */
-	public static function init( string $line, $delimiter = '|' ) {
+	public static function init( string $line, string $delimiter = '|' ): Tag {
 		list( $date, $name ) = explode( $delimiter, $line );
 
 		return new self( $name, $date );
@@ -48,7 +52,14 @@ class Tag {
 	 * @return string
 	 */
 	public function get_date( string $format = 'Y-m-d' ): string {
-		return $this->date->format( $format );
+		try {
+			$date =  ( new \DateTime( $this->date ) )->format( $format );
+		}
+		catch ( \Exception $e ) {
+			$date = '';
+		}
+
+		return $date;
 	}
 
 }

@@ -9,13 +9,17 @@ namespace lloc\gitphpcl;
 class Logs {
 
 	/**
-	 * @var string $pattern
-	 * @var array $logs
+	 * @var string
 	 */
-	protected $pattern, $logs = [];
+	protected string $pattern;
 
 	/**
-	 * @param $pattern
+	 * @var array
+	 */
+	protected array $logs = [];
+
+	/**
+	 * @param string $pattern
 	 */
 	public function __construct( string $pattern ) {
 		$this->pattern = $pattern;
@@ -24,9 +28,9 @@ class Logs {
 	/**
 	 * @param array $arr
 	 *
-	 * @return self
+	 * @return Logs
 	 */
-	public function add( array $arr ): self {
+	public function add( array $arr ): Logs {
 		foreach ( $arr as $line ) {
 			if ( preg_match( $this->pattern, $line, $match ) ) {
 				$this->logs[ $match['type'] ][] = new Commit( $match );
@@ -37,11 +41,11 @@ class Logs {
 	}
 
 	/**
-	 * @param $type
+	 * @param string $type
 	 *
-	 * @return array
+	 * @return string[]
 	 */
-	public function get( $type ) {
+	public function get( string $type ): array {
 		$logs = $this->logs[ $type ] ?? [];
 
 		usort( $logs, function ( $a, $b ) {

@@ -9,7 +9,7 @@ namespace lloc\gitphpcl;
 class Changelog {
 
 	/**
-	 * @var array
+	 * @var string[]
 	 */
 	protected $lines = [];
 
@@ -17,13 +17,15 @@ class Changelog {
 	 * @param string $filename
 	 */
 	public function __construct( string $filename ) {
-		$this->lines = file( $filename ) ?? [];
+		$this->lines = file_exists( $filename) ? file( $filename ) : [];
 	}
 
 	/**
+	 * @param string $needle
+	 *
 	 * @return bool|int
 	 */
-	public function firstpos( $needle ) {
+	public function firstpos( string $needle ) {
 		$alen = count( $this->lines );
 		$slen = strlen( $needle );
 
@@ -43,7 +45,9 @@ class Changelog {
 	 * @return string
 	 */
 	public function getpos( int $index ): string {
-		return trim( $this->lines[ $index ] );
+		$line = $this->lines[ $index ] ?? '';
+
+		return trim( $line );
 	}
 
 	/**
@@ -57,9 +61,9 @@ class Changelog {
 	}
 
 	/**
-	 * @param array $lines
+	 * @param string[] $lines
 	 * @param int $pos
-	 * @param array $add
+	 * @param string[] $add
 	 *
 	 * @return int
 	 */

@@ -2,7 +2,7 @@
   "name": "lloc/gitphpcl",
   "description": "Generate your changelog from git with PHP",
   "require": {
-    "php": "^7.0"
+    "php": ">=7.4"
   },
   "keywords": ["git","changelog"],
   "license": "GPL-3.0-or-later",
@@ -18,5 +18,10 @@
     "psr-4" : {
       "lloc\\gitphpcl\\" : "src/"
     }
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^1.10",
+    "squizlabs/php_codesniffer": "^3.7",
+    "phpcompatibility/php-compatibility": "^9.3"
   }
 }

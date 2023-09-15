@@ -8,12 +8,25 @@ namespace lloc\gitphpcl;
  */
 class Directories {
 
-	protected
-		$currentDir,
-		$path = [];
+	/**
+	 * @var string $currentDir
+	 */
+	protected string $currentDir;
 
 	/**
-	 * @param array $options
+	 * @var string[] $path
+	 */
+	protected array $path = [];
+
+	/**
+	 * @param string $currentDir
+	 */
+	public function __construct( string $currentDir ) {
+		$this->currentDir = realpath( $currentDir );
+	}
+
+	/**
+	 * @param string[] $options
 	 *
 	 * @return Directories
 	 */
@@ -28,13 +41,6 @@ class Directories {
 		}
 
 		return $obj;
-	}
-
-	/**
-	 * @param string $currentDir
-	 */
-	function __construct( string $currentDir ) {
-		$this->currentDir = realpath( $currentDir );
 	}
 
 	/**

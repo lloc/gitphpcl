@@ -11,7 +11,7 @@ class ArrayOutput {
 	/**
 	 * @var string
 	 */
-	protected $cmd;
+	protected string $cmd;
 
 	/**
 	 * @param string $cmd
@@ -21,7 +21,7 @@ class ArrayOutput {
 	}
 
 	/**
-	 * @return array
+	 * @return string[]
 	 */
 	function get(): array {
 		$result = shell_exec( $this->cmd );
