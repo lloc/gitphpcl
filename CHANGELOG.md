@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.0.0 (2023-09-15)
+
+### Bug Fixes
+
+* **Changelog**: Fix for notice on non-existing files
+
+### Feature
+
+* **Composer** PHPStand code quality check
+* **Composer** Codesniffer check for PHP 8 compatibility
+
 ## v0.3.3 (2018-01-21)
 
 * **Autoloader**: loading changed
