@@ -12,7 +12,7 @@ Tag your releases like
 
 You can now create your Changelog with the command
 
-`vendor/lloc/gitphpcl/changeog -f Changelog.md`
+`vendor/lloc/gitphpcl/changelog -f Changelog.md`
 
 or 
 
